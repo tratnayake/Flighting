@@ -17,6 +17,7 @@ extract("MASTER.xlsx")
 
 function extract(filePath){
 	return new Promise(function(resolve,reject){
+		console.log("EXTRACT")
 		//Cadets
 		var cadets = [];
 		var workbook = new Excel.Workbook();
@@ -40,6 +41,7 @@ function extract(filePath){
 
 function transform(cadets){
 	return new Promise(function(resolve,reject){
+		console.log("TRANSFORM")
 		for (var i = 0; i < cadets.length; i++) {
 			//Provide the cadets rank Numbers for easy sorting later
 			var rankNumber = 0;
@@ -83,6 +85,7 @@ function transform(cadets){
 //Split all the cadets up into ranks and genders
 function split(cadets){
 	return new Promise(function(resolve,reject){
+		console.log("SPLIT")
 		//TODO: Move this block to a different function
 		var squadron = new Object();
 		
@@ -124,6 +127,7 @@ function split(cadets){
 
 function prep(squadron){
 	return new Promise(function(resolve,reject){
+		console.log("PREP")
 		//Define the flight object
 		var flightObject = {name:"name",
 					  cadets:[],
@@ -159,8 +163,7 @@ function prep(squadron){
 					  	stats.males = this.getNumGender("M");
 					  	stats.females = this.getNumGender("F");
 					  	return stats;
-					  },
-					  total: this.cadets.length
+					  }
 
 					 }
 
@@ -191,11 +194,12 @@ function flight(squadron){
 		console.log("Starting with ACs");
 		var flightingRank = "AC"
 		var cadets = squadron[flightingRank + "s"].males
-
-
+	
+		//FOR EACH CADET
 		for (var i = 0; i < 3; i++) {
 			console.log(cadets[i])
-			
+			var cadet = cadets[i];	
+			//GET THE STATS
 			var stats = [];
 			for (var flight in squadron.flights){
 				//console.log(squadron.flights[flight]);
@@ -203,10 +207,32 @@ function flight(squadron){
 			}
 			console.log(stats);
 
-			//Sort by total first
-			for (var i = 0; i < squadron.flights.length; i++) {
-				console.log("TOTAL:" + squadron.flights[i].total)
+			//Now that we have the stats, we need to apply our rules. First find the max total
+			var maxTotal = 0
+			for (var x = 0; x < stats.length; x++) {
+				if(stats[x].total > maxTotal) {
+					maxTotal = stats[x].total;
+				}
 			};
+			console.log("Max total is " + maxTotal);
+
+			//Case 1: If all we care about is totals, add the cadet to the first empty element in the array. Deterine candidates
+			var candidates = []
+			for (var y = 0; y < stats.length; y++) {
+				if(stats[y].total < maxTotal || stats[y].total == 0){
+					candidates.push(stats[y].name)
+				}
+			};
+			console.log("Candidates to push into are " + candidates)
+			var candidate = candidates[Math.floor(Math.random()*candidates.length)];
+			console.log("Candidate picked is " + candidate)
+			squadron.flights[candidate - 1].cadets.push(cadet);
+			console.log(squadron.flights[candidate-1])
+			console.log("Cadet " + cadet.lastName + ", " +cadet.firstName + " "  + "Pushed into flight " + candidate);
+			for (var flight in squadron.flights){
+				console.log(squadron.flights[flight])
+			}
+
 		};
 	})
 }
