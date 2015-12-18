@@ -1,0 +1,14 @@
+{
+  "name": "flighting",
+  "version": "1.0.0",
+  "description": "A node.js application that assists AdminO's in flighting cadets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tratnayake",
+  "license": "ISC",
+  "dependencies": {
+    "exceljs": "^0.2.3"
+  }
+}

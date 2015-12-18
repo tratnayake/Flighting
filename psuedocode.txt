@@ -1,0 +1,6 @@
+1. Import from excel file, import each row as
+{"Rank":"Flight Sergeant", "Last Name": "Ratnayake, "First Name": "Thilina", "Gender":"M"}
+
+2. Transform data so that each Rank has a rank number
+
+3. Start distribution
